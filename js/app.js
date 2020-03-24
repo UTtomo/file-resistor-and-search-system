@@ -4,6 +4,7 @@ $(function() {
   $("#RegisterBtn").click(onRegisterBtn);
   $("#SaveBtn").click(onSaveBtn);
   $("#EditBtn").click(onEditBtn);
+  $("#SearchBtn").click(onSearchBtn);
   $("#UpdateBtn").click(onUpdateBtn);
   $("#YesBtn_logout").click(onLogoutBtn);
   $("#YesBtn_delete").click(deleteMemo);
@@ -73,6 +74,8 @@ function onSaveBtn()
 
   // value じゃないよね
   var sound = $('#sound').val();
+  // const sound = document.getElementById('sound').files[0];
+  
   var content = $("#content").val();
   if (title != '')
   {
@@ -100,7 +103,7 @@ function addMemo(title,sound,content) {
   })
   .fail(function(err){
     if (err.code == -32602) {
-      alert("Collection 'Memo' not found! Please create collection.");
+      alert("'Memo' not found! ");
     } else {
       console.error(JSON.stringify(err));
       alert('Insert failed!');
@@ -159,6 +162,15 @@ function onEditBtn()
   $("#content_edit").text(content);
   $.mobile.changePage("#EditPage");
 }
+
+function onSearchBtn()
+{
+  console.log('Search Programm!');
+  $.mobile.changePage("#SearchPage");
+
+  
+}
+
 
 function onUpdateBtn()
 {
@@ -226,7 +238,7 @@ function getMemoList() {
     })
   .fail(function(err){
     if (err.code == -32602) {
-      alert("Collection 'Memo' not found! Please create collection from IDE.");
+      alert(" 'Memo' not found!");
     } else {
       console.error(JSON.stringify(err));
       alert('Insert failed!');
