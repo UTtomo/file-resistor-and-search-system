@@ -4,6 +4,7 @@ $(function() {
   $("#RegisterBtn").click(onRegisterBtn);
   $("#SaveBtn").click(onSaveBtn);
   $("#EditBtn").click(onEditBtn);
+  $("#SearchPageBtn").click(onSearchPageBtn);
   $("#SearchBtn").click(onSearchBtn);
   $("#UpdateBtn").click(onUpdateBtn);
   $("#YesBtn_logout").click(onLogoutBtn);
@@ -52,6 +53,15 @@ function onLoginBtn()
       console.error(JSON.stringify(err));
     });
 }
+
+
+function onSearchBtn()
+{
+  var search = $("#search").val();
+  searchMemo(search);
+
+}
+
 
 function onLogoutBtn()
 {
@@ -163,11 +173,11 @@ function onEditBtn()
   $.mobile.changePage("#EditPage");
 }
 
-function onSearchBtn()
+function onSearchPageBtn()
 {
   console.log('Search Programm!');
   $.mobile.changePage("#SearchPage");
-
+  
   
 }
 
@@ -233,6 +243,50 @@ function getMemoList() {
       if (list.length == 0) {
         $li = $("<li>No memo found</li>");
         $("#TopListView").prepend($li);
+      }
+      $("#ListPage #TopListView").listview("refresh");
+    })
+  .fail(function(err){
+    if (err.code == -32602) {
+      alert(" 'Memo' not found!");
+    } else {
+      console.error(JSON.stringify(err));
+      alert('Insert failed!');
+    }
+  });
+}
+
+function searchMemo(search) {
+  console.log('Search List');
+  var MC = monaca.cloud;
+  var memo = MC.Collection("Memo");
+  memo.findMine()
+    .done(function(items, totalItems)
+    {
+        console.log("all: " + JSON.stringify(items));
+      $("#SearchPage #SearchListView").empty();
+      var list = items.items;
+
+      for (var i in list)
+      {
+        
+        var memo = list[i];
+        var d = new Date(memo._createdAt);
+        var date = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
+        $li = $("<li><a href='javascript:onShowLink(\"" + memo._id + "\",\"" + memo.title + "\",\"" + memo.sound + "\",\"" + memo.content + "\")' class='show'><h3></h3><p></p></a><a href='javascript:onDeleteBtn(\"" + memo._id + "\")' class='delete'>Delete</a></li>");
+        $li.find("h3").text(date);
+        $li.find("p").text(memo.title);
+        
+        console.log(memo.title);
+      
+        if(memo.title.match(search)){
+          $("#SearchListView").prepend($li);
+        }
+        
+      }
+      if (list.length == 0) {
+        $li = $("<li>No memo found</li>");
+        $("#SearchListView").prepend($li);
       }
       $("#ListPage #TopListView").listview("refresh");
     })
