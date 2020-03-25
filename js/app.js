@@ -59,7 +59,6 @@ function onSearchBtn()
 {
   var search = $("#search").val();
   searchMemo(search);
-
 }
 
 
@@ -125,7 +124,11 @@ function onShowLink(id,title,sound,content)
 {
   currentMemoID = id;
   $("#title_show").text(title);
-  $("#sound_show").text(sound);
+    // もしsoundがあればリンクを表示
+  
+  $("#sound_show").html( "<a href=" + sound + ">" + sound + "</a>" );
+  console.log($("#sound_show"));
+  
   $("#content_show").text(content);
   $.mobile.changePage("#ShowPage");
 }
