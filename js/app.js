@@ -49,7 +49,7 @@ function onLoginBtn()
     })
     .fail(function(err)
     {
-      alert('Login failed: ' + err.message);
+      alert('IDかパスワードが間違っています。');
       console.error(JSON.stringify(err));
     });
 }
@@ -301,4 +301,8 @@ function searchMemo(search) {
       alert('Insert failed!');
     }
   });
+}
+
+function upload(){
+
 }
